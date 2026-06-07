@@ -18,6 +18,7 @@ Firmware personalizado para ESP8266 con dashboard web, pantalla OLED integrada y
 - [Modulos Principales del Firmware](#modulos-principales-del-firmware)
 - [Dashboard Web](#dashboard-web)
 - [Detalles Tecnicos de la Web](#detalles-tecnicos-de-la-web)
+- [Web Flasher](#web-flasher)
 - [Compilacion](#compilacion)
 - [Hardware Objetivo](#hardware-objetivo)
 - [Uso Responsable](#uso-responsable)
@@ -39,6 +40,8 @@ Firmware personalizado para ESP8266 con dashboard web, pantalla OLED integrada y
 | README documentado | Listo |
 | Imagenes del dispositivo | Incluidas en `IMG/` |
 | Capturas del dashboard | Incluidas en `IMG/` |
+| Web Flasher | Incluido en `webflasher/` |
+| Binarios listos | Incluidos en `binarios/` |
 | Web antigua desde LittleFS | Bloqueada por firmware |
 | IP `.1` anterior | Unificada a `.2` |
 
@@ -245,6 +248,41 @@ La interfaz fue modificada para cargar en espanol, usar fondo negro, botones ver
 
 [Volver al indice](#indice)
 
+<a id="web-flasher"></a>
+
+## Web Flasher
+
+El proyecto incluye una pagina de flasheo web para instalar el firmware desde el navegador usando Web Serial. Esta pagina esta pensada para publicarse por GitHub Pages, ya que Web Serial requiere HTTPS en Chrome o Edge.
+
+| Recurso | Ruta |
+| --- | --- |
+| Pagina flasher | `webflasher/index.html` |
+| Manifest ESP Web Tools | `binarios/manifest.json` |
+| Binario firmware | `binarios/ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin` |
+| Version publicada | `2.0.0` |
+| Chip objetivo | `ESP8266` |
+| SHA256 del binario | `8036ED6E3658A0AFEDF2C37CA7A2C7E84E1A5396C403766CB48EF0F8E900A14A` |
+
+Cuando GitHub Pages este activo, el flasher queda disponible en:
+
+```text
+https://pepeangell5.github.io/ESP8266-DEAUTHER/webflasher/
+```
+
+Flujo recomendado:
+
+1. Abrir el Web Flasher desde Chrome o Edge.
+2. Conectar el ESP8266 por USB con un cable de datos.
+3. Presionar `Conectar e instalar`.
+4. Seleccionar el puerto serial del ESP8266.
+5. Esperar a que termine el flasheo y reinicie el dispositivo.
+6. Conectarse al AP `PepeAngell-DEAUTH`.
+7. Entrar al dashboard en `http://192.168.4.2`.
+
+Si la placa no entra automaticamente en modo bootloader, mantener presionado el boton `FLASH`/`BOOT` al conectar o reiniciar el ESP8266.
+
+[Volver al indice](#indice)
+
 <a id="compilacion"></a>
 
 ## Compilacion
@@ -253,6 +291,12 @@ Este proyecto usa PlatformIO.
 
 ```bash
 pio run
+```
+
+El binario publicado para el Web Flasher se guarda en:
+
+```text
+binarios/ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin
 ```
 
 Para subir al ESP8266, ajusta el puerto serial segun tu equipo:

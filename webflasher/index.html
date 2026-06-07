@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050806">
+  <title>PEPEANGELL Web Flasher</title>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050806;
+      --panel: #0b120e;
+      --panel-2: #101a13;
+      --line: #213325;
+      --text: #eef7ee;
+      --muted: #9db5a3;
+      --green: #39ff88;
+      --green-soft: rgba(57, 255, 136, 0.16);
+      --orange: #ff9f1c;
+      --orange-soft: rgba(255, 159, 28, 0.18);
+      --danger: #ff5c5c;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(57, 255, 136, 0.05), transparent 32%),
+        linear-gradient(215deg, rgba(255, 159, 28, 0.08), transparent 42%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(57, 255, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 255, 136, 0.035) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--orange);
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      color: var(--green);
+      background: var(--green-soft);
+      box-shadow: 0 0 28px rgba(57, 255, 136, 0.13);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(11, 18, 14, 0.78);
+      font-size: 14px;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px var(--green);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(11, 18, 14, 0.9);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+    }
+
+    .hero-copy {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      color: var(--orange);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 12px 0 14px;
+      max-width: 760px;
+      font-size: 64px;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+      margin: 0 0 26px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--green);
+      color: #031107;
+      background: var(--green);
+      font-weight: 800;
+    }
+
+    .button.secondary {
+      border-color: var(--orange);
+      color: var(--orange);
+      background: var(--orange-soft);
+    }
+
+    .installer {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .installer h2,
+    .section h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .install-box {
+      display: grid;
+      place-items: center;
+      min-height: 162px;
+      border: 1px dashed rgba(57, 255, 136, 0.58);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(57, 255, 136, 0.12), rgba(255, 159, 28, 0.08));
+      padding: 22px;
+    }
+
+    esp-web-install-button {
+      --esp-tools-button-color: #031107;
+      --esp-tools-button-text-color: #031107;
+      --esp-tools-button-border-radius: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .metric {
+      padding: 18px;
+      min-height: 112px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16, 26, 19, 0.8);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .metric strong {
+      display: block;
+      overflow-wrap: anywhere;
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .metric.accent strong {
+      color: var(--green);
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 24px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .step {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-2);
+      min-height: 154px;
+    }
+
+    .step b {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      color: #031107;
+      background: var(--orange);
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .step p,
+    .note,
+    footer {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--orange);
+      background: rgba(255, 159, 28, 0.08);
+      border-radius: 0 8px 8px 0;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 24px 0 0;
+      font-size: 14px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .installer,
+      .section {
+        padding: 20px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 40px;
+        line-height: 1.02;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">PA</div>
+        <div>
+          <div>PEPEANGELL</div>
+          <small>ESP8266-DEAUTHER Web Flasher</small>
+        </div>
+      </div>
+      <div class="status"><span class="pulse"></span> Firmware 2.0.0 listo para instalar</div>
+    </header>
+
+    <section class="hero">
+      <div class="panel hero-copy">
+        <div class="eyebrow">Flasheo por navegador</div>
+        <h1>Web Flasher para ESP8266-DEAUTHER</h1>
+        <p class="lead">Instala el firmware PEPEANGELL directamente desde Chrome o Edge usando USB. La pagina carga el binario publicado en este repositorio y lo envia al ESP8266 mediante Web Serial.</p>
+        <div class="actions">
+          <a class="button" href="../binarios/ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin" download>Descargar binario</a>
+          <a class="button secondary" href="https://github.com/pepeangell5/ESP8266-DEAUTHER">Ver repositorio</a>
+        </div>
+      </div>
+
+      <aside class="panel installer" aria-label="Instalador">
+        <h2>Instalador</h2>
+        <div class="install-box">
+          <esp-web-install-button manifest="../binarios/manifest.json">
+            <button slot="activate" class="button">Conectar e instalar</button>
+            <span slot="unsupported">Usa Chrome o Edge con soporte Web Serial.</span>
+            <span slot="not-allowed">Abre esta pagina por HTTPS para habilitar Web Serial.</span>
+          </esp-web-install-button>
+        </div>
+        <p class="note">Si tu placa no entra sola en modo bootloader, manten presionado FLASH/BOOT mientras conectas o reinicias el ESP8266.</p>
+      </aside>
+    </section>
+
+    <section class="grid" aria-label="Datos del firmware">
+      <div class="metric accent"><span>Version</span><strong>2.0.0</strong></div>
+      <div class="metric"><span>Chip</span><strong>ESP8266 / NodeMCU</strong></div>
+      <div class="metric"><span>AP despues del flash</span><strong>PepeAngell-DEAUTH</strong></div>
+      <div class="metric accent"><span>IP Dashboard</span><strong>192.168.4.2</strong></div>
+    </section>
+
+    <section class="panel section">
+      <h2>Flujo de instalacion</h2>
+      <div class="steps">
+        <article class="step">
+          <b>1</b>
+          <h3>Conecta el ESP8266</h3>
+          <p>Usa un cable USB de datos y selecciona el puerto serial cuando el navegador lo pida.</p>
+        </article>
+        <article class="step">
+          <b>2</b>
+          <h3>Inicia el flasheo</h3>
+          <p>Presiona conectar e instalar. El navegador cargara el manifest y el binario desde la carpeta binarios.</p>
+        </article>
+        <article class="step">
+          <b>3</b>
+          <h3>Espera el reinicio</h3>
+          <p>Cuando termine, deja que el ESP8266 reinicie y cree su red de administracion.</p>
+        </article>
+        <article class="step">
+          <b>4</b>
+          <h3>Entra al dashboard</h3>
+          <p>Conectate al AP y abre `http://192.168.4.2` para usar la interfaz web.</p>
+        </article>
+      </div>
+      <p class="note">Este firmware es para investigacion, aprendizaje y pruebas autorizadas en redes propias o laboratorios controlados.</p>
+    </section>
+
+    <footer>
+      <span>PEPEANGELL ESP8266-DEAUTHER</span>
+      <div class="links">
+        <a href="https://www.instagram.com/pepeangelll">Instagram @pepeangelll</a>
+        <a href="https://www.pepeangell.dev">pepeangell.dev</a>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
