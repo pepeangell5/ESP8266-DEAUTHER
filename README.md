@@ -1,12 +1,65 @@
 # ESP8266-DEAUTHER
 
-Firmware personalizado para ESP8266 con interfaz web, pantalla OLED y panel de control para pruebas de laboratorio en redes WiFi propias. Esta version esta adaptada con identidad visual PEPEANGELL, dashboard oscuro, idioma espanol por defecto y acceso web unificado en `192.168.4.2`.
+Firmware personalizado para ESP8266 con dashboard web, pantalla OLED integrada y control local por tres botones. Esta version esta adaptada con identidad visual PEPEANGELL, interfaz oscura, flujo en espanol y acceso web unificado en `192.168.4.2`.
 
-> Este proyecto esta pensado para investigacion, aprendizaje y pruebas autorizadas. No debe usarse contra redes, dispositivos o personas sin permiso explicito.
+> Proyecto para investigacion, aprendizaje y pruebas autorizadas en redes propias. No debe usarse contra redes, dispositivos o personas sin permiso explicito.
+
+<a id="indice"></a>
+
+## Indice
+
+- [Resumen Rapido](#resumen-rapido)
+- [Vista General](#vista-general)
+- [Caracteristicas](#caracteristicas)
+- [Acceso al Dashboard](#acceso-al-dashboard)
+- [Pines y Conexiones](#pines-y-conexiones)
+- [Galeria del Dashboard](#galeria-del-dashboard)
+- [Flujo de Funcionamiento](#flujo-de-funcionamiento)
+- [Modulos Principales del Firmware](#modulos-principales-del-firmware)
+- [Dashboard Web](#dashboard-web)
+- [Detalles Tecnicos de la Web](#detalles-tecnicos-de-la-web)
+- [Compilacion](#compilacion)
+- [Hardware Objetivo](#hardware-objetivo)
+- [Uso Responsable](#uso-responsable)
+- [Repositorio](#repositorio)
+- [Autor y Redes](#autor-y-redes)
+
+<a id="resumen-rapido"></a>
+
+## Resumen Rapido
+
+| Firmware | Dashboard | Hardware | Acceso |
+| --- | --- | --- | --- |
+| `v2.0.0` | Web embebida en PROGMEM | ESP8266 + OLED integrada | `192.168.4.2` |
+| PEPEANGELL build | Tema negro, verde y naranja | 3 botones fisicos | AP `PepeAngell-DEAUTH` |
+| PlatformIO | Espanol por defecto | SSD1306 I2C `0x3C` | Password `123456789` |
+
+| Recurso | Estado |
+| --- | --- |
+| README documentado | Listo |
+| Imagenes del dispositivo | Incluidas en `IMG/` |
+| Capturas del dashboard | Incluidas en `IMG/` |
+| Web antigua desde LittleFS | Bloqueada por firmware |
+| IP `.1` anterior | Unificada a `.2` |
+
+[Volver al indice](#indice)
+
+<a id="vista-general"></a>
 
 ## Vista General
 
 ![Dispositivo fisico](IMG/Dispositivo-fisico.JPG)
+
+Este firmware convierte el ESP8266 en un equipo de laboratorio con dos formas de control:
+
+- **Dashboard web:** control principal desde el navegador.
+- **Pantalla integrada + botones:** navegacion local basica desde el dispositivo.
+
+La interfaz web vive embebida dentro del firmware, por lo que no depende de cargar archivos externos en LittleFS para mostrar el dashboard personalizado.
+
+[Volver al indice](#indice)
+
+<a id="caracteristicas"></a>
 
 ## Caracteristicas
 
@@ -14,13 +67,18 @@ Firmware personalizado para ESP8266 con interfaz web, pantalla OLED y panel de c
 - Punto de acceso propio para administrar el dispositivo.
 - Dashboard web embebido en memoria del firmware.
 - Interfaz oscura con acentos verdes y naranjas.
-- Pantalla OLED SSD1306 con menu local.
+- Pantalla OLED SSD1306 integrada.
+- Control local con tres botones fisicos.
 - Escaneo de puntos de acceso y clientes visibles.
 - Administracion de SSID para pruebas beacon/probe en laboratorio.
 - Panel de control para pruebas WiFi autorizadas.
 - Configuracion persistente en EEPROM.
 - Archivos web comprimidos y embebidos en `webfiles.h`.
 - Version personalizada: `2.0.0`.
+
+[Volver al indice](#indice)
+
+<a id="acceso-al-dashboard"></a>
 
 ## Acceso al Dashboard
 
@@ -33,8 +91,48 @@ Al encender el dispositivo, se crea un AP para administrar el firmware.
 | IP web | `http://192.168.4.2` |
 | Version | `2.0.0` |
 | Web URL interna | `pepeangell.dev` |
+| Idioma web | Espanol |
 
 El firmware fuerza la IP del AP y la interfaz web a `192.168.4.2`, incluso si existia una configuracion anterior guardada en EEPROM.
+
+[Volver al indice](#indice)
+
+<a id="pines-y-conexiones"></a>
+
+## Pines y Conexiones
+
+La pantalla OLED esta integrada en el dispositivo, por lo que no requiere cableado externo adicional. Aun asi, el firmware la declara como una pantalla `SSD1306_I2C` para que el controlador sepa como comunicarse con ella.
+
+### Pantalla OLED Integrada
+
+| Elemento | Valor en firmware | Nota |
+| --- | --- | --- |
+| Tipo | `SSD1306_I2C` | Pantalla OLED integrada |
+| Direccion I2C | `0x3C` | Direccion usada por el display |
+| SDA | `GPIO14` | Linea I2C configurada en firmware |
+| SCL | `GPIO12` | Linea I2C configurada en firmware |
+| Orientacion | `FLIP_DIPLAY true` | Pantalla invertida segun montaje |
+| Texto | `PepeAngell` | Identidad en pantalla |
+
+### Botones Fisicos
+
+| Funcion | Macro | GPIO | Uso |
+| --- | --- | --- | --- |
+| Arriba | `BUTTON_UP` | `GPIO14` | Navegar hacia arriba en el menu |
+| Abajo | `BUTTON_DOWN` | `GPIO12` | Navegar hacia abajo en el menu |
+| Seleccionar | `BUTTON_A` | `GPIO13` | Confirmar / entrar / ejecutar accion |
+
+### Reset
+
+| Funcion | Macro | GPIO | Uso |
+| --- | --- | --- | --- |
+| Reset | `RESET_BUTTON` | `GPIO5` | Reinicio/formato segun flujo del firmware |
+
+> Nota: esta tabla documenta la configuracion activa en `A_config.h` bajo `DISPLAY_EXAMPLE_I2C`. Si se cambia el modelo de placa o preset, estos pines pueden variar.
+
+[Volver al indice](#indice)
+
+<a id="galeria-del-dashboard"></a>
 
 ## Galeria del Dashboard
 
@@ -72,6 +170,10 @@ El firmware fuerza la IP del AP y la interfaz web a `192.168.4.2`, incluso si ex
 
 ![Configuracion 3](IMG/config3.png)
 
+[Volver al indice](#indice)
+
+<a id="flujo-de-funcionamiento"></a>
+
 ## Flujo de Funcionamiento
 
 ```mermaid
@@ -86,12 +188,18 @@ flowchart TD
     H --> I["Usuario administra escaneo, SSIDs, configuracion y pruebas autorizadas"]
 ```
 
+El flujo interno prioriza que el dashboard nuevo siempre salga desde PROGMEM. Esto evita que archivos antiguos en LittleFS vuelvan a mostrar una interfaz previa.
+
+[Volver al indice](#indice)
+
+<a id="modulos-principales-del-firmware"></a>
+
 ## Modulos Principales del Firmware
 
 | Archivo | Funcion |
 | --- | --- |
 | `ESP8266_Deauther_SSD1306.ino` | Punto de entrada del firmware, inicializacion general y ciclo principal. |
-| `A_config.h` | Configuracion base: AP, password, IP, pantalla, version y opciones del firmware. |
+| `A_config.h` | Configuracion base: AP, password, IP, pantalla, botones, version y opciones del firmware. |
 | `wifi.cpp` / `wifi.h` | AP, DNS, servidor web, rutas HTTP y entrega del dashboard embebido. |
 | `settings.cpp` / `settings.h` | Carga, guardado y normalizacion de configuracion persistente. |
 | `Scan.cpp` / `Scan.h` | Escaneo de puntos de acceso y clientes. |
@@ -99,22 +207,32 @@ flowchart TD
 | `Stations.*` | Modelo/lista de clientes detectados. |
 | `SSIDs.*` | Lista de SSID personalizados para pruebas controladas. |
 | `Attack.*` | Control interno de pruebas WiFi autorizadas. |
-| `DisplayUI.*` | Menu local en pantalla OLED. |
+| `DisplayUI.*` | Menu local en pantalla OLED integrada. |
 | `CLI.*` | Interfaz de comandos por serial/web. |
 | `webfiles.h` | HTML, CSS, JS e idiomas comprimidos y embebidos en el firmware. |
 | `data/web/` | Fuentes web comprimidas que se usan para regenerar `webfiles.h`. |
+
+[Volver al indice](#indice)
+
+<a id="dashboard-web"></a>
 
 ## Dashboard Web
 
 El dashboard esta dividido en secciones principales:
 
-- **Aviso de uso:** pantalla inicial con confirmacion antes de entrar al panel.
-- **Scan:** escaneo de APs y clientes visibles en el entorno de pruebas.
-- **SSIDs:** administracion de nombres SSID para escenarios controlados.
-- **Attack:** panel de estado para pruebas WiFi autorizadas y monitoreo de paquetes.
-- **Settings:** configuracion del AP, parametros internos, idioma, pantalla y opciones persistentes.
+| Seccion | Funcion |
+| --- | --- |
+| Aviso de uso | Pantalla inicial con confirmacion antes de entrar al panel. |
+| Scan | Escaneo de APs y clientes visibles en el entorno de pruebas. |
+| SSIDs | Administracion de nombres SSID para escenarios controlados. |
+| Attack | Panel de estado para pruebas WiFi autorizadas y monitoreo de paquetes. |
+| Settings | Configuracion del AP, parametros internos, idioma, pantalla y opciones persistentes. |
 
 La interfaz fue modificada para cargar en espanol, usar fondo negro, botones verdes/naranjas, checks de alto contraste y footer personalizado con redes PEPEANGELL.
+
+[Volver al indice](#indice)
+
+<a id="detalles-tecnicos-de-la-web"></a>
 
 ## Detalles Tecnicos de la Web
 
@@ -122,7 +240,12 @@ La interfaz fue modificada para cargar en espanol, usar fondo negro, botones ver
 - Los archivos se almacenan comprimidos como `.gz`.
 - `webfiles.h` contiene los mismos archivos como arreglos PROGMEM.
 - El firmware sirve la web nueva desde PROGMEM para evitar que LittleFS muestre versiones anteriores.
+- Las rutas `/web/*.html`, `/web/*.css` y `/web/js/*.js` se interceptan para servir la interfaz nueva.
 - Las cabeceras HTTP usan `no-cache` para evitar que el navegador conserve la interfaz vieja.
+
+[Volver al indice](#indice)
+
+<a id="compilacion"></a>
 
 ## Compilacion
 
@@ -152,12 +275,21 @@ lib_ldf_mode = deep+
 
 > Si compilas en otra computadora, revisa `platformio.ini`, especialmente la ruta de `platform_packages`, porque puede depender de la instalacion local del core ESP8266.
 
+[Volver al indice](#indice)
+
+<a id="hardware-objetivo"></a>
+
 ## Hardware Objetivo
 
 - ESP8266 / NodeMCU ESP-12E.
-- Pantalla OLED SSD1306 por I2C.
+- Pantalla OLED SSD1306 integrada.
+- Tres botones fisicos: arriba, abajo y seleccionar.
 - Firmware configurado con texto de pantalla `PepeAngell`.
 - Comunicacion serial a `115200`.
+
+[Volver al indice](#indice)
+
+<a id="uso-responsable"></a>
 
 ## Uso Responsable
 
@@ -170,15 +302,25 @@ Este firmware debe usarse solamente en:
 
 No uses este proyecto para afectar redes de terceros, interrumpir comunicaciones ajenas o realizar pruebas fuera de un entorno permitido.
 
-## Repo
+[Volver al indice](#indice)
+
+<a id="repositorio"></a>
+
+## Repositorio
 
 Repositorio del proyecto:
 
 [github.com/pepeangell5/ESP8266-DEAUTHER](https://github.com/pepeangell5/ESP8266-DEAUTHER)
 
-## Autor
+[Volver al indice](#indice)
+
+<a id="autor-y-redes"></a>
+
+## Autor y Redes
 
 PEPEANGELL
 
 - Instagram: [@pepeangelll](https://www.instagram.com/pepeangelll)
 - Web: [www.pepeangell.dev](https://www.pepeangell.dev)
+
+[Volver al indice](#indice)
