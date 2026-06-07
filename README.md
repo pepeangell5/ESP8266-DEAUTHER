@@ -4,6 +4,18 @@ Firmware personalizado para ESP8266 con dashboard web, pantalla OLED integrada y
 
 > Proyecto para investigacion, aprendizaje y pruebas autorizadas en redes propias. No debe usarse contra redes, dispositivos o personas sin permiso explicito.
 
+## Accesos Rapidos
+
+[![Web Flasher](https://img.shields.io/badge/WEB_FLASHER-ABRIR-39FF88?style=for-the-badge&labelColor=050806&color=39FF88)](https://pepeangell5.github.io/ESP8266-DEAUTHER/webflasher/)
+[![Binario](https://img.shields.io/badge/BINARIO-v2.0.0-FF9F1C?style=for-the-badge&labelColor=050806&color=FF9F1C)](binarios/ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin)
+[![Dashboard](https://img.shields.io/badge/DASHBOARD-192.168.4.2-00D084?style=for-the-badge&labelColor=050806&color=00D084)](#acceso-al-dashboard)
+[![AP](https://img.shields.io/badge/AP-PepeAngell--DEAUTH-23C55E?style=for-the-badge&labelColor=050806&color=23C55E)](#acceso-al-dashboard)
+[![Version](https://img.shields.io/badge/VERSION-2.0.0-F97316?style=for-the-badge&labelColor=050806&color=F97316)](#compilacion)
+[![Repositorio](https://img.shields.io/badge/GITHUB-REPO-8B5CF6?style=for-the-badge&labelColor=050806&color=8B5CF6)](https://github.com/pepeangell5/ESP8266-DEAUTHER)
+
+**Web Flasher:** [abrir instalador online](https://pepeangell5.github.io/ESP8266-DEAUTHER/webflasher/)  
+**Descarga directa del firmware:** [ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin](binarios/ESP8266-DEAUTHER-PEPEANGELL-v2.0.0.bin)
+
 <a id="indice"></a>
 
 ## Indice
@@ -264,6 +276,8 @@ El proyecto incluye una pagina de flasheo web para instalar el firmware desde el
 | SHA256 del binario | `8036ED6E3658A0AFEDF2C37CA7A2C7E84E1A5396C403766CB48EF0F8E900A14A` |
 
 Cuando GitHub Pages este activo, el flasher queda disponible en:
+
+[![Abrir Web Flasher](https://img.shields.io/badge/ABRIR_WEB_FLASHER-INSTALAR_FIRMWARE-39FF88?style=for-the-badge&labelColor=050806&color=39FF88)](https://pepeangell5.github.io/ESP8266-DEAUTHER/webflasher/)
 
 ```text
 https://pepeangell5.github.io/ESP8266-DEAUTHER/webflasher/
