@@ -378,7 +378,7 @@ Repositorio del proyecto:
 
 PEPEANGELL
 
-- Instagram: [@pepeangelll](https://www.instagram.com/pepeangelll)
+- Instagram: [@esp32_tools](https://www.instagram.com/esp32_tools)
 - Web: [www.pepeangell.dev](https://www.pepeangell.dev)
 
 [Volver al indice](#indice)
